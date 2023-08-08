@@ -5,6 +5,8 @@ const app = express()
 const port = process.env.PORT
 const User = require('./models/user')
 const jwt = require('jsonwebtoken')
+const verifyUser = require('./middlewares/verifyUser')
+
 
 mongoose.connect(process.env.MONGO_URI)
 .then(connected=>console.log("Connected to mongoDB"))
@@ -55,7 +57,7 @@ app.post("/login",(req,res)=>{
         .then(found=>{
             if(found){
                 if(found.password==password){
-                    const token = jwt.sign({email:found.email},process.env.JWT_SECRET)
+                    const token = jwt.sign({email:found.email}, process.env.JWT_SECRET)
                     res.json({token:token})
                 }
                 else{
@@ -70,25 +72,9 @@ app.post("/login",(req,res)=>{
     }
 })
 
-//token is generated while logging in
-//-> To validate the user
-//-> To manipulate th content using authorized methods
-
-
-
-//post data, post title, user who posted 
-// post data, post title -> provided by user
-// user who posted -> token
-// 
-// 
-// 
-// 
-// 
-// 
-// 
-// 
-// 
-// 
+app.post("/verify",verifyUser,(req,res)=>{
+    res.json({message:"Helloworld"})
+})
 
 
 app.listen(port,()=>console.log("App is running on port ",port))
