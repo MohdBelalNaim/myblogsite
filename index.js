@@ -73,7 +73,7 @@ app.post("/login",(req,res)=>{
 })
 
 app.post("/verify",verifyUser,(req,res)=>{
-    res.json({message:"Helloworld"})
+    res.json({user:req.user.email})
 })
 
 
