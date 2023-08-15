@@ -18,7 +18,7 @@ router.post("/create-post",verify,(req,res)=>{
         const post = new Post({
             title:title,
             content:content,
-            postedBy:req.user.email, //dd-mm-yyyy
+            postedBy:req.user.email, 
             date:formattedDate
         })
         post.save()
@@ -39,8 +39,25 @@ router.post('/all-posts',verify,(req,res)=>{
     })
 })
 
-//post delete
-//user's post
-//edit post
+router.post('/my-posts',verify,(req,res)=>{
+    Post.find({postedBy:req.user.email})
+    .then(found=>{
+        if(found){
+            res.json({data:found})
+        }
+        else{
+            res.json({error:"No posts found"})
+        }
+    })
+})
+
+router.post('/delete-post/:id',verify,(req,res)=>{
+    const {id} = req.params
+    Post.deleteOne({_id:id})
+    .then(deleted=>res.json({success:"Post deleted"}))
+    .catch(err=>res.json({error:"Post was not deleted"}))
+
+})
+
 
 module.exports = router
